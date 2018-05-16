@@ -1,2 +1,2 @@
 # somax
-somax improvisaiton software
+somax improvisation software
