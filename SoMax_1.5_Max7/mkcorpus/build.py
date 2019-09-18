@@ -11,7 +11,7 @@ class Main:
     """ New build script. Designed without support for interactive mode"""
 
     def __init__(self, input_path, output_folder, is_verbose, foreground, self_bg, mel_bg, harm_bg, uses_mel_from_json,
-                 uses_held_melodics, uses_legacy_parser):
+                 uses_held_melodics, uses_legacy_parser, corpus_name):
         self.logger = Main.init_logger(is_verbose)
 
         if not os.path.isabs(input_path):
@@ -35,7 +35,8 @@ class Main:
                              'the corpus folder of SoMax or use the -o option to point to this directory.')
 
         builder = CorpusBuilder(input_path, foreground_channels=foreground, self_bg_channels=self_bg,
-                                mel_bg_channels=mel_bg, harm_bg_channels=harm_bg, uses_legacy_parser=uses_legacy_parser)
+                                mel_bg_channels=mel_bg, harm_bg_channels=harm_bg, uses_legacy_parser=uses_legacy_parser,
+                                corpus_name=corpus_name)
 
         # Build the corpus and write all the files (standard, harmonic and melodic)
         output_filepaths = builder.build_corpus(os.path.normpath(output_folder) + '/')
@@ -141,11 +142,14 @@ class Main:
 
 
 if __name__ == '__main__':
+    # TODO: Write out default values explicitly
     parser = argparse.ArgumentParser()
     parser.add_argument("inputfile",
                         help="Path to the midi file, audio file  or folder to parse (relative or absolute).",
                         type=Main.is_midi_audio_or_folder)
-    parser.add_argument("-o", "--output_folder", help="Path to the corpus folder", type=Main.is_folder,
+    # TODO: Add valid filename format
+    parser.add_argument("-o", "--output-name", help="Optional name of output file.")
+    parser.add_argument("-d", "--output-directory", help="Path to the corpus folder", type=Main.is_folder,
                         default=settings.DEFAULT_CORPUS_PATH)
     parser.add_argument("-v", "--verbose", help="Verbose output", action='store_true', default=False)
     parser.add_argument("-f", "--foreground",
@@ -154,17 +158,17 @@ if __name__ == '__main__':
                              "list without spaces. \n"
                              "EXAMPLE: 1,2,8 will result in channels 1, 2 and 8 as output channels.",
                         type=Main.parse_fg, default=settings.DEFAULT_FOREGROUND)
-    parser.add_argument("-s", "--self_bg",
+    parser.add_argument("-s", "--self-bg",
                         help="When using a midi file as input, this argument specifies which midi channel(s) Somax "
                              "will listen to when mode is set to SELF. \n"
                              "Formatting: see --foreground",
                         type=Main.parse_sbg, default=settings.DEFAULT_SELF_BACKGROUND)
-    parser.add_argument("-m", "--mel_bg",
+    parser.add_argument("-m", "--mel-bg",
                         help="When using a midi file as input, this argument specifies which midi channel(s) Somax "
                              "will listen to when mode is set to MELODIC. \n"
                              "Formatting: see --foreground",
                         type=Main.parse_mbg, default=settings.DEFAULT_MEL_BACKGROUND)
-    parser.add_argument("-b", "--harm_bg",
+    parser.add_argument("-b", "--harm-bg",
                         help="When using a midi file as input, this argument specifies which midi channel(s) Somax "
                              "will listen to when mode is set to HARMONIC. \n"
                              "Formatting: see --foreground",
@@ -186,5 +190,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    Main(args.inputfile, args.output_folder, args.verbose, args.foreground, args.self_bg, args.mel_bg, args.harm_bg,
-         args.melodic_from_json, args.melodic_are_held, args.legacy)
+    Main(args.inputfile, args.output_directory, args.verbose, args.foreground, args.self_bg, args.mel_bg, args.harm_bg,
+         args.melodic_from_json, args.melodic_are_held, args.legacy, args.output_name)

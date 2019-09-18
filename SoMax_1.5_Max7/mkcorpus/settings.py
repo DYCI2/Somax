@@ -38,4 +38,4 @@ INFO_INDENT = ' ' * 8
 
 # Set this to write the raw midi file as a note matrix for debugging purposes.
 #     See docstring of `OpSomaxStanadard.readMIDIFiles for formatting.
-WRITE_NOTE_MATRIX = False
+WRITE_NOTE_MATRIX = True
