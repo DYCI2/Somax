@@ -12,3 +12,6 @@ Readings on Somax: http://repmus.ircam.fr/somax/home
 Readings on the DYCI2 Project : http://dyci2.ircam.fr
 
 Complete corpus folder including soundfiles : https://nubo.ircam.fr/index.php/s/8X6eZ7HZD4pCDnC
+
+
+repository : github/dyci2/somax master branch
